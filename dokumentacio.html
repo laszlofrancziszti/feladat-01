@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koncertjegyek Feladat Megoldása</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        h1, h2, h3 { color: #333; }
+        pre { background: #f4f4f4; padding: 10px; border: 1px solid #ddd; overflow-x: auto; }
+        code { color: #c7254e; }
+        .section { margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <h1>Koncertjegyek Feladat Megoldása</h1>
+
+    <div class="section">
+        <h2>Feladat leírása</h2>
+        <p>A feladat célja, hogy adott számú koncertjegy és vásárlói maximum ár alapján megadjuk, mely jegyet vásárolják meg a vásárlók, ha a jegy ára nem haladja meg a vásárló által meghatározott maximumot. Ha egy vásárló nem talál megfelelő jegyet, <code>-1</code> legyen a kimenet.</p>
+    </div>
+
+    <div class="section">
+        <h2>Megoldás ismertetése</h2>
+        <p>A megoldásban a jegyárakat sorba rendezzük, és a vásárlói maximum árakhoz bináris kereséssel keressük meg a legnagyobb, de a maximum árat meg nem haladó jegyet. Az algoritmus <code>bisect_right</code> modullal gyorsítja a keresést.</p>
+
+        <pre><code>import bisect
+
+def jegyeladas(n, m, jegyarak, maximum_arak):
+    jegyarak.sort()
+    eredmenyek = []
+    for max_ar in maximum_arak:
+        index = bisect.bisect_right(jegyarak, max_ar) - 1
+        if index >= 0 and jegyarak[index] &lt;= max_ar:
+            eredmenyek.append(jegyarak[index])
+            jegyarak.pop(index)
+        else:
+            eredmenyek.append(-1)
+    return eredmenyek
+</code></pre>
+
+        <p><strong>Megjegyzés:</strong> A bináris keresés gyorssá teszi a keresést, és a legrosszabb esetben <code>O(m log n)</code> időigényű a megoldás.</p>
+    </div>
+
+    <div class="section">
+        <h2>Nagy tesztfájl generálása</h2>
+        <p>A következő szkript 100 000 véletlenszerű jegyárat és vásárlói maximális árat generál, melyek értéke 1 és 10<sup>9</sup> között van. A kód véletlen értékekkel tölti meg a bemenetet.</p>
+
+        <pre><code>import random
+
+def nagy_teszt_fajl_letrehozas(fajlnev, n, m):
+    with open(fajlnev, 'w') as f:
+        f.write(f"{n} {m}\\n")
+        jegyarak = [str(random.randint(1, 10**9)) for _ in range(n)]
+        f.write(" ".join(jegyarak) + "\\n")
+        maximum_arak = [str(random.randint(1, 10**9)) for _ in range(m)]
+        f.write(" ".join(maximum_arak) + "\\n")
+
+nagy_teszt_fajl_letrehozas("teszt_10_bemenet.txt", 100000, 100000)
+</code></pre>
+
+        <p>Ez a szkript biztosítja, hogy a nagy bemeneteket könnyen létre lehessen hozni, és azok tesztelésre készek legyenek.</p>
+    </div>
+
+    <div class="section">
+        <h2>Összefoglalás</h2>
+        <p>A megoldás hatékonyan kezeli a nagy mennyiségű adatot a rendezés és bináris keresés segítségével. A tesztfájlok létrehozása és a megoldás tesztelése során figyelmet fordítottunk a gyors futási időre és memóriahasználatra, különösen a nagyobb bemenetek esetén.</p>
+    </div>
+
+</body>
+</html>
